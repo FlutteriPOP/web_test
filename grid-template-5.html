@@ -1,0 +1,2056 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"
+    />
+
+    <title>Grid Template 4</title>
+    <link rel="stylesheet" href="template5.css" />
+  </head>
+
+  <body>
+    <div class="container-fluid d-flex g-0 DSA-Template">
+      <div>
+        <div class="dynamic-section col-md-4" id="dynamic-section-1">
+          <div class="preloader">
+            <div class="spinner"></div>
+          </div>
+        </div>
+        <div class="dynamic-section col-md-4" id="dynamic-section-2">
+          <div class="preloader">
+            <div class="spinner"></div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="dynamic-section col-md-4" id="dynamic-section-3">
+          <div class="preloader">
+            <div class="spinner"></div>
+          </div>
+        </div>
+        <div class="dynamic-section col-md-4" id="dynamic-section-4">
+          <div class="preloader">
+            <div class="spinner"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="disclaimer" class="slick-sliders position-fixed w-100"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      async function fetchJson(url) {
+        try {
+          const response = await fetch(url);
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return await response.json();
+        } catch (error) {
+          console.error("Error fetching JSON data:", error);
+          return null;
+        }
+      }
+
+      // URL of your API
+      // const apiUrl = `{{url("api/gridtemplateapi/$layout_id")}}`;
+      const apiUrl = `https://lotusdm.com/api/gridtemplateapi/24`;
+      let data; // Global variable to store data
+
+      // console.log("data", data);
+
+      async function loadData() {
+        const response = await fetch(apiUrl);
+        data = await response.json(); // Set data to the global variable
+        // console.log("data", data);
+      }
+
+      loadData().then(() => {
+        // console.log("Data__454545", data);
+        // Use data here after it's loaded
+        renderDisclaimer(data);
+
+        insertDynamicContent(
+          data.zone_data[0].zone_type,
+          data.zone_data,
+          "dynamic-section-1",
+          data.zone_data[0]["zone_no"]
+        );
+
+        insertDynamicContent(
+          data.zone_data[3].zone_type,
+          data.zone_data,
+          "dynamic-section-4",
+          data.zone_data[3]["zone_no"]
+        );
+
+        insertDynamicContent(
+          data.zone_data[1].zone_type,
+          data.zone_data,
+          "dynamic-section-2",
+          data.zone_data[1]["zone_no"]
+        );
+
+        insertDynamicContent(
+          data.zone_data[2].zone_type,
+          data.zone_data,
+          "dynamic-section-3",
+          data.zone_data[2]["zone_no"]
+        );
+      });
+
+      loadData().then(() => {
+        // console.log(data);
+        // Use data here after it's loaded
+        applyZone1Background(data.zone_data);
+        applyZone2Background(data.zone_data);
+        applyZone3Background(data.zone_data);
+        applyZone4Background(data.zone_data);
+      });
+
+      loadData().then(() => {
+        // console.log(data);
+        // Use data here after it's loaded
+        adjustSectionHeights(data.zone_data);
+      });
+
+      function adjustSectionHeights(data) {
+        const section1 = document.getElementById("dynamic-section-1");
+        const section2 = document.getElementById("dynamic-section-2");
+        const section3 = document.getElementById("dynamic-section-3");
+        const section4 = document.getElementById("dynamic-section-4");
+
+        // console.log("section1", section1);
+        // console.log("section2", section2);
+        // console.log("section3", section3);
+        // console.log("section4", section4);
+
+        let zoneType1 = "",
+          zoneType2 = "",
+          zoneType3 = "",
+          zoneType4 = "";
+
+        // data.forEach((zone) => {
+        //   if (zone.zone_number === 1) zoneType1 = zone.zone_type;
+        //   if (zone.zone_number === 2) zoneType2 = zone.zone_type;
+        //   if (zone.zone_number === 3) zoneType3 = zone.zone_type;
+        //   if (zone.zone_number === 4) zoneType4 = zone.zone_type;
+        // });
+
+        // console.log("zoneType1", zoneType1);
+        // console.log("zoneType2", zoneType2);
+        // console.log("zoneType3", zoneType3);
+        // console.log("zoneType4", zoneType4);
+
+        // Helper function to set height for img, video, and swiper-slide inside a section
+        function setMediaHeight(section, height) {
+          // Set height for all img and video elements inside the section
+          const imgs = section.querySelectorAll("img");
+          const videos = section.querySelectorAll("video");
+
+          imgs.forEach((img) =>
+            img.style.setProperty("height", height, "important")
+          );
+          videos.forEach((video) =>
+            video.style.setProperty("height", height, "important")
+          );
+
+          // Swiper-specific logic to get all slides' img
+          const swiperSlides = section.querySelectorAll(
+            ".swiper-container .swiper-slide img"
+          );
+
+          swiperSlides.forEach((swiperImg) =>
+            swiperImg.style.setProperty("height", height, "important")
+          );
+        }
+
+        // 1st Zone Logic
+        if (zoneType1 === "Menu" && zoneType2 === "Menu") {
+          section1.style.height = "48.5vh";
+          section2.style.height = "48.5vh";
+        } else if (
+          zoneType1 === "Menu" &&
+          ["Image", "Video", "Slideshow"].includes(zoneType2)
+        ) {
+          section1.style.height = "57vh";
+          section2.style.height = "40vh";
+          setMediaHeight(section2, "40vh"); // Set media height inside section2
+        } else if (
+          zoneType2 === "Menu" &&
+          ["Image", "Video", "Slideshow"].includes(zoneType1)
+        ) {
+          section1.style.height = "40vh";
+          section2.style.height = "57vh";
+          setMediaHeight(section1, "40vh"); // Set media height inside section1
+        } else if (
+          ["Image", "Video", "Slideshow"].includes(zoneType1) &&
+          ["Image", "Video", "Slideshow"].includes(zoneType2)
+        ) {
+          section1.style.height = "48.5vh";
+          section2.style.height = "48.5vh";
+          setMediaHeight(section1, "48.5vh");
+          setMediaHeight(section2, "48.5vh");
+        }
+
+        // 2nd Zone Logic
+        if (zoneType3 === "Menu" && zoneType4 === "Menu") {
+          section3.style.height = "48.5vh";
+          section4.style.height = "48.5vh";
+        } else if (
+          zoneType3 === "Menu" &&
+          ["Image", "Video", "Slideshow"].includes(zoneType4)
+        ) {
+          section3.style.height = "57vh";
+          section4.style.height = "40vh";
+          setMediaHeight(section4, "40vh"); // Set media height inside section4
+        } else if (
+          zoneType4 === "Menu" &&
+          ["Image", "Video", "Slideshow"].includes(zoneType3)
+        ) {
+          section3.style.height = "40vh";
+          section4.style.height = "57vh";
+          setMediaHeight(section3, "40vh"); // Set media height inside section3
+        } else if (
+          ["Image", "Video", "Slideshow"].includes(zoneType3) &&
+          ["Image", "Video", "Slideshow"].includes(zoneType4)
+        ) {
+          section3.style.height = "48.5vh";
+          section4.style.height = "48.5vh";
+          setMediaHeight(section3, "48.5vh");
+          setMediaHeight(section4, "48.5vh");
+        }
+      }
+
+      // Compare the zone types and adjust heights for section 2 and 3
+      // console.log("section1", section1);
+      // console.log("section2", section2);
+      // console.log("section3", section3);
+      // console.log("section4", section4);
+
+      adjustSectionHeights(data);
+
+      function insertDynamicContent(
+        zoneType,
+        zoneData,
+        targetElementId,
+        zoneNo
+      ) {
+        const targetElement = document.getElementById(targetElementId);
+        targetElement.innerHTML = ""; // Clear existing content
+
+        switch (zoneType) {
+          case data.zone_data[0].zone_type:
+            insertMenuContent(zoneData, targetElementId, zoneNo);
+            break;
+          case data.zone_data[1].zone_type:
+            insertImageContent(zoneData, targetElementId, zoneNo);
+            break;
+          case data.zone_data[2].zone_type:
+            insertSlideshowContent(zoneData, targetElementId, zoneNo);
+            break;
+          case data.zone_data[3].zone_type:
+            insertSlideshowContent1(zoneData, targetElementId, zoneNo);
+            break;
+          default:
+            console.error("Unknown zone type:", zoneType);
+            break;
+        }
+      }
+
+      // Function to render disclaimer data and initialize Slick slider
+      function renderDisclaimer(data) {
+        const disclaimerID = "disclaimer";
+        const disclaimerElement = document.getElementById(disclaimerID);
+
+        // Ensure the disclaimer element exists
+        if (disclaimerElement) {
+          const disclaimerData = data.disclaimer;
+
+          // Set the background color and text color
+          disclaimerElement.style.backgroundColor =
+            disclaimerData.disclaimer_background_color;
+          disclaimerElement.style.color = disclaimerData.disclaimer_text_color;
+          disclaimerElement.style.fontFamily =
+            disclaimerData.disclaimer_font_family;
+          disclaimerElement.style.fontWeight =
+            disclaimerData.disclaimer_font_weight;
+          disclaimerElement.style.fontSize =
+            disclaimerData.disclaimer_font_size;
+          disclaimerElement.style.overflow = disclaimerData.disclaimer_overflow;
+
+          // Create the HTML content for the disclaimer
+          const html = `
+              <marquee scrollamount="2" behavior="scroll" direction="left">${disclaimerData.disclaimer_text_one}</marquee>
+          `;
+
+          // Insert the disclaimer content into the element
+          disclaimerElement.innerHTML = html;
+
+          // Initialize Slick slider after adding the content
+          //initializeSlick();
+        } else {
+          console.error("Disclaimer element not found.");
+        }
+      }
+
+      // Function to_dynamic_zone_1
+      function insertMenuContent(menuData, targetElementId, targetZoneNo) {
+        const targetElement = document.getElementById(targetElementId);
+        targetElement.innerHTML = ""; // Clear existing content
+
+        menuData.forEach((zone) => {
+          if (zone.zone_no === targetZoneNo) {
+            if (zone.zone_type === "Menu") {
+              zone.sections.forEach((sectionData) => {
+                let html = `
+      <div class="menu-section">
+        <div class="px-4 py-4">
+          <div class="menu-title-name ms-1 d-flex align-items-center" style="display: ${
+            sectionData.header_details.title_content
+              ? "block"
+              : "none !important"
+          }; margin-bottom:-4px;border-bottom: 1px solid gray;">
+            <span class="menuTitle" style="font-size:${
+              sectionData.header_details.title_font_size
+            }; color:${
+                  sectionData.header_details.title_font_color
+                };font-family:${
+                  sectionData.header_details.title_font_family
+                };font-weight:${sectionData.header_details.title_font_weight};
+                      text-transform: uppercase;
+                ">
+              ${sectionData.header_details.title_content}
+   <img id="dynamicImage" src="${sectionData.header_details.title_icon_image}" 
+                
+                 style="height: ${
+                   sectionData.header_details.title_icon_height
+                 }; width: ${sectionData.header_details.title_icon_width};" 
+                 ${
+                   sectionData.header_details.title_icon_image
+                     ? 'class="show-image"'
+                     : ""
+                 } />
+
+            </span>
+          </div>
+          <div class="position-relative z-1">
+            <table class="w-100 mt-2">
+             <thead class="MenuItemDesc w-100" style="display: ${
+               sectionData.column_title_details.colum_title_data.column_1 ||
+               sectionData.column_title_details.colum_title_data.column_2 ||
+               sectionData.column_title_details.colum_title_data.column_3 ||
+               sectionData.column_title_details.colum_title_data.column_4
+                 ? "table-header-group"
+                 : "none !important"
+             };">
+                <tr class="foodItem w-100" style="background-color:${
+                  sectionData.column_title_details.column_title_background
+                };font-family:${
+                  sectionData.column_title_details.column_title_font_family
+                };font-weight:${
+                  sectionData.column_title_details.column_title_font_weight
+                };">
+                  <td class="ps-2" style="font-size:${
+                    sectionData.column_title_details.column_title_font_size
+                  };color:${
+                  sectionData.column_title_details.column_title_color
+                };">${
+                  sectionData.column_title_details.colum_title_data.column_1 ||
+                  ""
+                }</td>
+                  <td class="ps-0 text-center" style="font-size:${
+                    sectionData.column_title_details.column_title_font_size
+                  };color:${
+                  sectionData.column_title_details.column_title_color
+                };">${
+                  sectionData.column_title_details.colum_title_data.column_2 ||
+                  ""
+                }</td>
+                  <td class="ps-0 text-center" style="font-size:${
+                    sectionData.column_title_details.column_title_font_size
+                  };color:${
+                  sectionData.column_title_details.column_title_color
+                };">${
+                  sectionData.column_title_details.colum_title_data.column_3 ||
+                  ""
+                }</td>
+                  <td class="ps-0 text-center" style="font-size:${
+                    sectionData.column_title_details.column_title_font_size
+                  };color:${
+                  sectionData.column_title_details.column_title_color
+                };">${
+                  sectionData.column_title_details.colum_title_data.column_4 ||
+                  ""
+                }</td>
+                </tr>
+              </thead>
+              <tbody class="product-list">`;
+
+                // Adding menu items
+                // Adding menu items
+                // Adding menu items
+                sectionData.menus.menu_item_data.forEach((item) => {
+                  const isSoldOut = item.item_sold === 1;
+                  const soldOutClass = isSoldOut ? "sold-out" : "";
+                  const isVegCategory = item.item_category === 1;
+                  const hasDescription =
+                    item.item_description &&
+                    item.item_description.trim() !== "";
+
+                  let categorySpan = "";
+                  if (isVegCategory) {
+                    categorySpan = `<h3 class="category-veg mb-0 mt-2 " style="display:inline-block; background-color:${sectionData.menus.category.category_background};font-family:${sectionData.menus.category.category_font_family};font-size:${sectionData.menus.category.category_font_size};font-weight:${sectionData.menus.category.category_font_weight};color:${sectionData.menus.category.category_title_color}; line-height:${sectionData.menus.category.category_font_line_height};  text-transform: uppercase;padding:10px 15px;border-bottom:1px solid #333 !important;">${item.column_1}</h3>`;
+                  } else {
+                    categorySpan = item.column_1; // Directly print the column_1 content if not category 1
+                  }
+
+                  // Apply border-bottom if there is no description and it's not a Veg category
+                  let borderStyle =
+                    !hasDescription && !isVegCategory
+                      ? "border-bottom:0px solid black;"
+                      : "border-bottom:none;";
+
+                  html += `
+  <tr class="product-menuItem-name ${soldOutClass}" style="position: relative; ${borderStyle}">
+    <td class="ps-1 pb-2" style="font-family: ${
+      sectionData.menus.menu_item_css.menu_item_font_family
+    }; font-size: ${
+                    sectionData.menus.menu_item_css.menu_item_font_size
+                  }; font-weight: ${
+                    sectionData.menus.menu_item_css.menu_item_font_weight
+                  }; color: ${
+                    sectionData.menus.menu_item_css.menu_item_title_color
+                  }; line-height: ${
+                    sectionData.menus.menu_item_css.menu_item_font_line_height
+                  };">
+      ${categorySpan} 
+      ${
+        isSoldOut
+          ? `<span class="sold" style="background-color: ${sectionData.menus.menu_item_css.sold_out_background}; color: ${sectionData.menus.menu_item_css.sold_out_color}; font-family: ${sectionData.menus.menu_item_css.sold_font_family}; font-size: ${sectionData.menus.menu_item_css.sold_font_size}; font-weight: ${sectionData.menus.menu_item_css.sold_font_weight}; padding:0.8% 1%; position:absolute; margin-left:5px; margin-top:-3px; border-radius:5px;">${sectionData.menus.menu_item_css.sold_out_title}</span>`
+          : ""
+      }
+    </td>
+    <td class="pb-2" style="font-family: ${
+      sectionData.menus.menu_item_css.menu_item_font_family
+    }; font-size: ${
+                    sectionData.menus.menu_item_css.menu_item_font_size
+                  }; font-weight: ${
+                    sectionData.menus.menu_item_css.menu_item_font_weight
+                  }; color: ${
+                    sectionData.menus.menu_item_css.menu_item_title_color
+                  };">${item.column_2 || ""}</td>
+    <td class="pb-2" style="font-family: ${
+      sectionData.menus.menu_item_css.menu_item_font_family
+    }; font-size: ${
+                    sectionData.menus.menu_item_css.menu_item_font_size
+                  }; font-weight: ${
+                    sectionData.menus.menu_item_css.menu_item_font_weight
+                  }; color: ${
+                    sectionData.menus.menu_item_css.menu_item_title_color
+                  };">${item.column_3 || ""}</td>
+    <td class="pb-2" style="font-family: ${
+      sectionData.menus.menu_item_css.menu_item_font_family
+    }; font-size: ${
+                    sectionData.menus.menu_item_css.menu_item_font_size
+                  }; font-weight: ${
+                    sectionData.menus.menu_item_css.menu_item_font_weight
+                  }; color: ${
+                    sectionData.menus.menu_item_css.menu_item_title_color
+                  };">${item.column_4 || ""}</td>
+  </tr>
+  `;
+
+                  // Only print the description row if item_category === 0
+                  if (hasDescription) {
+                    html += `
+    <tr class="description category-0">
+      <td colspan="4" class="ps-1" style="font-family: ${
+        sectionData.menus.menu_item_css.menu_item_desc_font_family
+      }; font-size: ${
+                      sectionData.menus.menu_item_css.menu_item_desc_font_size
+                    }; font-weight: ${
+                      sectionData.menus.menu_item_css.menu_item_desc_font_weight
+                    }; color: ${
+                      sectionData.menus.menu_item_css.menu_item_desc_title_color
+                    }; line-height: ${
+                      sectionData.menus.menu_item_css
+                        .menu_item_desc_font_line_height
+                    };">
+        ${item.item_description || ""}
+      </td>
+    </tr>
+    `;
+                  }
+                });
+
+                html += `</tbody></table></div></div></div>`;
+                targetElement.innerHTML += html;
+              });
+            } else if (
+              (zone.zone_type === "Image" && zone.zone_no === targetZoneNo) ||
+              (zone.zone_type === "Video" && zone.zone_no === targetZoneNo)
+            ) {
+              // Create a container for the image or video
+              const container = document.createElement("div");
+              container.style.width = "50vw";
+              // container.style.height = `40vh`;
+              // container.style.height = `auto`;
+
+              let media;
+              if (zone.zone_type === "Image") {
+                // Create image element
+                media = document.createElement("img");
+                media.src = zone.image_link;
+                media.style.width = "50vw";
+                media.classList.add("img-fluid");
+                media.style.position = "relative";
+                media.style.zIndex = 9999;
+                // media.style.height = `40vh`;
+                // media.style.height = `auto`;
+                // media.style.objectFit = "cover"; // Ensure image fills the container
+              } else if (zone.zone_type === "Video") {
+                // Create video element
+                media = document.createElement("video");
+                media.src = zone.video_link;
+                media.style.width = "50vw";
+                // media.style.height = `40vh`;
+                // media.style.height = `auto`;
+                media.style.objectFit = "cover";
+                media.style.position = "relative";
+                media.style.zIndex = 9999;
+                media.autoplay = true;
+                media.muted = true;
+                media.loop = true;
+                media.controls = false; // Add video controls
+              }
+
+              // Append image/video to container
+              container.appendChild(media);
+
+              // Append container to the target element
+              targetElement.appendChild(container);
+            } else if (zone.zone_type === "Slideshow") {
+              let html = `
+          <div class="swiper-container" style=" width: 50vw; overflow: ${zone.overflow}; z-index:9999;">
+              <div class="swiper-wrapper">`;
+
+              zone.media.forEach((media) => {
+                html += `<div class="swiper-slide">
+                      <img src="${media.url}" class="img-fluid" alt="Slide" style="width: 100%; "/>
+                  </div>`;
+              });
+
+              html += `</div>
+
+          </div>`;
+
+              targetElement.innerHTML += html;
+
+              // Initialize Swiper after adding slides
+              const swiper = new Swiper(".swiper-container", {
+                loop: true,
+                autoplay: {
+                  delay: 2000,
+                },
+                pagination: {
+                  el: ".swiper-pagination",
+                  clickable: true,
+                },
+                navigation: {
+                  nextEl: ".swiper-button-next",
+                  prevEl: ".swiper-button-prev",
+                },
+                // Dynamic Effect (autoplay,fade,cards,coverflow,flip,cube)
+                effect: zone.media_effect.toLowerCase(),
+                speed: zone.speed,
+                // Fetch effect from JSON
+                // Customize Effects based on chosen media_effect
+                fadeEffect: {
+                  crossFade: true,
+                },
+                // Swiper Specific effect
+                slideEffect: {
+                  crossFade: true,
+                },
+              });
+            }
+          }
+        });
+      }
+      //
+
+      // Function to_dynamic_zone_2
+      function insertImageContent(imageData, targetElementId, targetZoneNo) {
+        const targetElement = document.getElementById(targetElementId);
+        // targetElement.innerHTML = ""; // Clear existing content
+        // console.log("imageData", imageData);
+        imageData.forEach((zone) => {
+          if (zone.zone_no === targetZoneNo) {
+            if (zone.zone_type === "Menu") {
+              zone.sections.forEach((sectionData) => {
+                let html = `
+      <div class="menu-section">
+        <div class="px-4 py-4">
+          <div class="menu-title-name ms-1 d-flex align-items-center" style="display: ${
+            sectionData.header_details.title_content
+              ? "block"
+              : "none !important"
+          }; margin-bottom:-4px;border-bottom: 1px solid gray;">
+            <span class="menuTitle" style="font-size:${
+              sectionData.header_details.title_font_size
+            }; color:${
+                  sectionData.header_details.title_font_color
+                };font-family:${
+                  sectionData.header_details.title_font_family
+                };font-weight:${sectionData.header_details.title_font_weight};
+                      text-transform: uppercase;
+                ">
+              ${sectionData.header_details.title_content}
+   <img id="dynamicImage" src="${sectionData.header_details.title_icon_image}" 
+                
+                 style="height: ${
+                   sectionData.header_details.title_icon_height
+                 }; width: ${sectionData.header_details.title_icon_width};" 
+                 ${
+                   sectionData.header_details.title_icon_image
+                     ? 'class="show-image"'
+                     : ""
+                 } />
+
+            </span>
+          </div>
+          <div class="position-relative z-1">
+            <table class="w-100 mt-2">
+             <thead class="MenuItemDesc w-100" style="display: ${
+               sectionData.column_title_details.colum_title_data.column_1 ||
+               sectionData.column_title_details.colum_title_data.column_2 ||
+               sectionData.column_title_details.colum_title_data.column_3 ||
+               sectionData.column_title_details.colum_title_data.column_4
+                 ? "table-header-group"
+                 : "none !important"
+             };">
+                <tr class="foodItem w-100" style="background-color:${
+                  sectionData.column_title_details.column_title_background
+                };font-family:${
+                  sectionData.column_title_details.column_title_font_family
+                };font-weight:${
+                  sectionData.column_title_details.column_title_font_weight
+                };">
+                  <td class="ps-2" style="font-size:${
+                    sectionData.column_title_details.column_title_font_size
+                  };color:${
+                  sectionData.column_title_details.column_title_color
+                };">${
+                  sectionData.column_title_details.colum_title_data.column_1 ||
+                  ""
+                }</td>
+                  <td class="ps-0 text-center" style="font-size:${
+                    sectionData.column_title_details.column_title_font_size
+                  };color:${
+                  sectionData.column_title_details.column_title_color
+                };">${
+                  sectionData.column_title_details.colum_title_data.column_2 ||
+                  ""
+                }</td>
+                  <td class="ps-0 text-center" style="font-size:${
+                    sectionData.column_title_details.column_title_font_size
+                  };color:${
+                  sectionData.column_title_details.column_title_color
+                };">${
+                  sectionData.column_title_details.colum_title_data.column_3 ||
+                  ""
+                }</td>
+                  <td class="ps-0 text-center" style="font-size:${
+                    sectionData.column_title_details.column_title_font_size
+                  };color:${
+                  sectionData.column_title_details.column_title_color
+                };">${
+                  sectionData.column_title_details.colum_title_data.column_4 ||
+                  ""
+                }</td>
+                </tr>
+              </thead>
+              <tbody class="product-list">`;
+
+                // Adding menu items
+                // Adding menu items
+                // Adding menu items
+                sectionData.menus.menu_item_data.forEach((item) => {
+                  const isSoldOut = item.item_sold === 1;
+                  const soldOutClass = isSoldOut ? "sold-out" : "";
+                  const isVegCategory = item.item_category === 1;
+                  const hasDescription =
+                    item.item_description &&
+                    item.item_description.trim() !== "";
+
+                  let categorySpan = "";
+                  if (isVegCategory) {
+                    categorySpan = `<h3 class="category-veg mb-0 mt-2 " style="display:inline-block; background-color:${sectionData.menus.category.category_background};font-family:${sectionData.menus.category.category_font_family};font-size:${sectionData.menus.category.category_font_size};font-weight:${sectionData.menus.category.category_font_weight};color:${sectionData.menus.category.category_title_color}; line-height:${sectionData.menus.category.category_font_line_height};  text-transform: uppercase;padding:10px 15px;border-bottom:1px solid #333 !important;">${item.column_1}</h3>`;
+                  } else {
+                    categorySpan = item.column_1; // Directly print the column_1 content if not category 1
+                  }
+
+                  // Apply border-bottom if there is no description and it's not a Veg category
+                  let borderStyle =
+                    !hasDescription && !isVegCategory
+                      ? "border-bottom:0px solid black;"
+                      : "border-bottom:none;";
+
+                  html += `
+  <tr class="product-menuItem-name ${soldOutClass}" style="position: relative; ${borderStyle}">
+    <td class="ps-1 pb-2" style="font-family: ${
+      sectionData.menus.menu_item_css.menu_item_font_family
+    }; font-size: ${
+                    sectionData.menus.menu_item_css.menu_item_font_size
+                  }; font-weight: ${
+                    sectionData.menus.menu_item_css.menu_item_font_weight
+                  }; color: ${
+                    sectionData.menus.menu_item_css.menu_item_title_color
+                  }; line-height: ${
+                    sectionData.menus.menu_item_css.menu_item_font_line_height
+                  };">
+      ${categorySpan} 
+      ${
+        isSoldOut
+          ? `<span class="sold" style="background-color: ${sectionData.menus.menu_item_css.sold_out_background}; color: ${sectionData.menus.menu_item_css.sold_out_color}; font-family: ${sectionData.menus.menu_item_css.sold_font_family}; font-size: ${sectionData.menus.menu_item_css.sold_font_size}; font-weight: ${sectionData.menus.menu_item_css.sold_font_weight}; padding:0.8% 1%; position:absolute; margin-left:5px; margin-top:-3px; border-radius:5px;">${sectionData.menus.menu_item_css.sold_out_title}</span>`
+          : ""
+      }
+    </td>
+    <td class="pb-2" style="font-family: ${
+      sectionData.menus.menu_item_css.menu_item_font_family
+    }; font-size: ${
+                    sectionData.menus.menu_item_css.menu_item_font_size
+                  }; font-weight: ${
+                    sectionData.menus.menu_item_css.menu_item_font_weight
+                  }; color: ${
+                    sectionData.menus.menu_item_css.menu_item_title_color
+                  };">${item.column_2 || ""}</td>
+    <td class="pb-2" style="font-family: ${
+      sectionData.menus.menu_item_css.menu_item_font_family
+    }; font-size: ${
+                    sectionData.menus.menu_item_css.menu_item_font_size
+                  }; font-weight: ${
+                    sectionData.menus.menu_item_css.menu_item_font_weight
+                  }; color: ${
+                    sectionData.menus.menu_item_css.menu_item_title_color
+                  };">${item.column_3 || ""}</td>
+    <td class="pb-2" style="font-family: ${
+      sectionData.menus.menu_item_css.menu_item_font_family
+    }; font-size: ${
+                    sectionData.menus.menu_item_css.menu_item_font_size
+                  }; font-weight: ${
+                    sectionData.menus.menu_item_css.menu_item_font_weight
+                  }; color: ${
+                    sectionData.menus.menu_item_css.menu_item_title_color
+                  };">${item.column_4 || ""}</td>
+  </tr>
+  `;
+
+                  // Only print the description row if item_category === 0
+                  if (hasDescription) {
+                    html += `
+    <tr class="description category-0">
+      <td colspan="4" class="ps-1" style="font-family: ${
+        sectionData.menus.menu_item_css.menu_item_desc_font_family
+      }; font-size: ${
+                      sectionData.menus.menu_item_css.menu_item_desc_font_size
+                    }; font-weight: ${
+                      sectionData.menus.menu_item_css.menu_item_desc_font_weight
+                    }; color: ${
+                      sectionData.menus.menu_item_css.menu_item_desc_title_color
+                    }; line-height: ${
+                      sectionData.menus.menu_item_css
+                        .menu_item_desc_font_line_height
+                    };">
+        ${item.item_description || ""}
+      </td>
+    </tr>
+    `;
+                  }
+                });
+
+                html += `</tbody></table></div></div></div>`;
+                targetElement.innerHTML += html;
+              });
+            } else if (
+              (zone.zone_type === "Image" && zone.zone_no === targetZoneNo) ||
+              (zone.zone_type === "Video" && zone.zone_no === targetZoneNo)
+            ) {
+              // Create a container for the image or video
+              const container = document.createElement("div");
+              container.style.width = `50vw`;
+              // container.style.height = `39vh`;
+              // container.style.height = `auto`;
+
+              let media;
+              if (zone.zone_type === "Image") {
+                // Create image element
+                media = document.createElement("img");
+                media.src = zone.image_link;
+                media.style.width = `50vw`;
+                media.classList.add("img-fluid");
+                media.style.position = "relative";
+                media.style.zIndex = 9999;
+                // media.style.height = `39vh`;
+                // media.style.height = `auto`;
+                // media.style.objectFit = "cover"; // Ensure image fills the container
+              } else if (zone.zone_type === "Video") {
+                // Create video element
+                media = document.createElement("video");
+                media.src = zone.video_link;
+                media.style.width = `50vw`;
+                // media.style.height = `39vh`;
+                // media.style.height = `auto`;
+                media.style.objectFit = "cover";
+                media.style.position = "relative";
+                media.style.zIndex = 9999;
+                media.autoplay = true;
+                media.muted = true;
+                media.loop = true;
+                media.controls = false; // Add video controls
+              }
+
+              // Append image/video to container
+              container.appendChild(media);
+
+              // Append container to the target element
+              targetElement.appendChild(container);
+            } else if (zone.zone_type === "Slideshow") {
+              let html = `
+          <div class="swiper-container" style=" width:50vw; overflow: ${zone.overflow}; z-index:9999;">
+              <div class="swiper-wrapper">`;
+
+              zone.media.forEach((media) => {
+                html += `<div class="swiper-slide">
+                      <img src="${media.url}" class="img-fluid" alt="Slide" style="width: 100%; "/>
+                  </div>`;
+              });
+
+              html += `</div>
+
+          </div>`;
+
+              targetElement.innerHTML += html;
+
+              // Initialize Swiper after adding slides
+              const swiper = new Swiper(".swiper-container", {
+                loop: true,
+                autoplay: {
+                  delay: 2000,
+                },
+                pagination: {
+                  el: ".swiper-pagination",
+                  clickable: true,
+                },
+                navigation: {
+                  nextEl: ".swiper-button-next",
+                  prevEl: ".swiper-button-prev",
+                },
+                // Dynamic Effect (autoplay,fade,cards,coverflow,flip,cube)
+                effect: zone.media_effect.toLowerCase(),
+                speed: zone.speed,
+                // Fetch effect from JSON
+                // Customize Effects based on chosen media_effect
+                fadeEffect: {
+                  crossFade: true,
+                },
+                // Swiper Specific effect
+                slideEffect: {
+                  crossFade: true,
+                },
+              });
+            }
+          } else if (
+            (zone.zone_type === "Image" && zone.zone_no === targetZoneNo) ||
+            (zone.zone_type === "Video" && zone.zone_no === targetZoneNo)
+          ) {
+            // Create a container for the image or video
+            const container = document.createElement("div");
+            container.style.width = `50vw`;
+            // container.style.height = `40vh`;
+            // container.style.height = `auto`;
+            // container.style.zIndex = 9999;
+
+            let media;
+            if (zone.zone_type === "Image") {
+              // Create image element
+              media = document.createElement("img");
+              media.src = zone.image_link;
+              console.log("zone.image_link", zone.image_link);
+              media.style.width = `50vw`;
+              media.classList.add("img-fluid");
+              media.style.position = "relative";
+              media.style.zIndex = 9999;
+              // media.style.height = `40vh`;
+              // media.style.height = `auto`;
+              // media.style.objectFit = "cover"; // Ensure image fills the container
+            } else if (zone.zone_type === "Video") {
+              // Create video element
+              media = document.createElement("video");
+              media.src = zone.video_link;
+              console.log("zone.video_link", zone.video_link);
+              media.style.width = `50vw`;
+              // media.style.height = `40vh`;
+              // media.style.height = `auto`;
+              media.style.position = "relative";
+              media.style.zIndex = 9999;
+              media.style.objectFit = "cover";
+              media.autoplay = true;
+              media.muted = true;
+              media.loop = true;
+              media.controls = false; // Add video controls
+            }
+
+            // Append image/video to container
+            container.appendChild(media);
+
+            // Append container to the target element
+            targetElement.appendChild(container);
+          } else if (
+            zone.zone_type === "Slideshow" &&
+            zone.zone_no === targetZoneNo
+          ) {
+            let html = `
+              <div class="swiper-container" style=" width:50vw; overflow: ${zone.overflow}; z-index:9999;">
+                  <div class="swiper-wrapper">`;
+
+            zone.media.forEach((media) => {
+              html += `<div class="swiper-slide">
+                          <img src="${media.url}" class="img-fluid" alt="Slide" style="width: 100%; "/>
+                      </div>`;
+            });
+
+            html += `</div>
+
+              </div>`;
+
+            targetElement.innerHTML += html;
+
+            // Initialize Swiper after adding slides
+            const swiper = new Swiper(".swiper-container", {
+              loop: true,
+              autoplay: {
+                delay: 2000,
+              },
+              pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+              },
+              navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+              },
+              // Dynamic Effect (autoplay,fade,cards,coverflow,flip,cube)
+              effect: zone.media_effect.toLowerCase(),
+              speed: zone.speed,
+              // Fetch effect from JSON
+              // Customize Effects based on chosen media_effect
+              fadeEffect: {
+                crossFade: true,
+              },
+              // Swiper Specific effect
+              slideEffect: {
+                crossFade: true,
+              },
+            });
+          }
+        });
+      }
+      //
+
+      // Function to_dynamic_zone_3
+      function insertSlideshowContent(
+        slideshowData,
+        targetElementId,
+        targetZoneNo
+      ) {
+        const targetElement = document.getElementById(targetElementId);
+        // console.log("slideshowData", slideshowData);
+        targetElement.innerHTML = ""; // Clear existing content
+
+        slideshowData.forEach((zone) => {
+          if (zone.zone_no === targetZoneNo) {
+            if (zone.zone_type === "Menu") {
+              zone.sections.forEach((sectionData) => {
+                let html = `
+      <div class="menu-section">
+        <div class="px-4 py-4">
+          <div class="menu-title-name ms-1 d-flex align-items-center" style="display: ${
+            sectionData.header_details.title_content
+              ? "block"
+              : "none !important"
+          }; margin-bottom:-4px;border-bottom: 1px solid gray;">
+            <span class="menuTitle" style="font-size:${
+              sectionData.header_details.title_font_size
+            }; color:${
+                  sectionData.header_details.title_font_color
+                };font-family:${
+                  sectionData.header_details.title_font_family
+                };font-weight:${sectionData.header_details.title_font_weight};
+                      text-transform: uppercase;
+                ">
+              ${sectionData.header_details.title_content}
+   <img id="dynamicImage" src="${sectionData.header_details.title_icon_image}" 
+                
+                 style="height: ${
+                   sectionData.header_details.title_icon_height
+                 }; width: ${sectionData.header_details.title_icon_width};" 
+                 ${
+                   sectionData.header_details.title_icon_image
+                     ? 'class="show-image"'
+                     : ""
+                 } />
+
+            </span>
+          </div>
+          <div class="position-relative z-1">
+            <table class="w-100 mt-2">
+             <thead class="MenuItemDesc w-100" style="display: ${
+               sectionData.column_title_details.colum_title_data.column_1 ||
+               sectionData.column_title_details.colum_title_data.column_2 ||
+               sectionData.column_title_details.colum_title_data.column_3 ||
+               sectionData.column_title_details.colum_title_data.column_4
+                 ? "table-header-group"
+                 : "none !important"
+             };">
+                <tr class="foodItem w-100" style="background-color:${
+                  sectionData.column_title_details.column_title_background
+                };font-family:${
+                  sectionData.column_title_details.column_title_font_family
+                };font-weight:${
+                  sectionData.column_title_details.column_title_font_weight
+                };">
+                  <td class="ps-2" style="font-size:${
+                    sectionData.column_title_details.column_title_font_size
+                  };color:${
+                  sectionData.column_title_details.column_title_color
+                };">${
+                  sectionData.column_title_details.colum_title_data.column_1 ||
+                  ""
+                }</td>
+                  <td class="ps-0 text-center" style="font-size:${
+                    sectionData.column_title_details.column_title_font_size
+                  };color:${
+                  sectionData.column_title_details.column_title_color
+                };">${
+                  sectionData.column_title_details.colum_title_data.column_2 ||
+                  ""
+                }</td>
+                  <td class="ps-0 text-center" style="font-size:${
+                    sectionData.column_title_details.column_title_font_size
+                  };color:${
+                  sectionData.column_title_details.column_title_color
+                };">${
+                  sectionData.column_title_details.colum_title_data.column_3 ||
+                  ""
+                }</td>
+                  <td class="ps-0 text-center" style="font-size:${
+                    sectionData.column_title_details.column_title_font_size
+                  };color:${
+                  sectionData.column_title_details.column_title_color
+                };">${
+                  sectionData.column_title_details.colum_title_data.column_4 ||
+                  ""
+                }</td>
+                </tr>
+              </thead>
+              <tbody class="product-list">`;
+
+                // Adding menu items
+                // Adding menu items
+                // Adding menu items
+                sectionData.menus.menu_item_data.forEach((item) => {
+                  const isSoldOut = item.item_sold === 1;
+                  const soldOutClass = isSoldOut ? "sold-out" : "";
+                  const isVegCategory = item.item_category === 1;
+                  const hasDescription =
+                    item.item_description &&
+                    item.item_description.trim() !== "";
+
+                  let categorySpan = "";
+                  if (isVegCategory) {
+                    categorySpan = `<h3 class="category-veg mb-0 mt-2 " style="display:inline-block; background-color:${sectionData.menus.category.category_background};font-family:${sectionData.menus.category.category_font_family};font-size:${sectionData.menus.category.category_font_size};font-weight:${sectionData.menus.category.category_font_weight};color:${sectionData.menus.category.category_title_color}; line-height:${sectionData.menus.category.category_font_line_height};  text-transform: uppercase;padding:10px 15px;border-bottom:1px solid #333 !important;">${item.column_1}</h3>`;
+                  } else {
+                    categorySpan = item.column_1; // Directly print the column_1 content if not category 1
+                  }
+
+                  // Apply border-bottom if there is no description and it's not a Veg category
+                  let borderStyle =
+                    !hasDescription && !isVegCategory
+                      ? "border-bottom:0px solid black;"
+                      : "border-bottom:none;";
+
+                  html += `
+  <tr class="product-menuItem-name ${soldOutClass}" style="position: relative; ${borderStyle}">
+    <td class="ps-1 pb-2" style="font-family: ${
+      sectionData.menus.menu_item_css.menu_item_font_family
+    }; font-size: ${
+                    sectionData.menus.menu_item_css.menu_item_font_size
+                  }; font-weight: ${
+                    sectionData.menus.menu_item_css.menu_item_font_weight
+                  }; color: ${
+                    sectionData.menus.menu_item_css.menu_item_title_color
+                  }; line-height: ${
+                    sectionData.menus.menu_item_css.menu_item_font_line_height
+                  };">
+      ${categorySpan} 
+      ${
+        isSoldOut
+          ? `<span class="sold" style="background-color: ${sectionData.menus.menu_item_css.sold_out_background}; color: ${sectionData.menus.menu_item_css.sold_out_color}; font-family: ${sectionData.menus.menu_item_css.sold_font_family}; font-size: ${sectionData.menus.menu_item_css.sold_font_size}; font-weight: ${sectionData.menus.menu_item_css.sold_font_weight}; padding:0.8% 1%; position:absolute; margin-left:5px; margin-top:-3px; border-radius:5px;">${sectionData.menus.menu_item_css.sold_out_title}</span>`
+          : ""
+      }
+    </td>
+    <td class="pb-2" style="font-family: ${
+      sectionData.menus.menu_item_css.menu_item_font_family
+    }; font-size: ${
+                    sectionData.menus.menu_item_css.menu_item_font_size
+                  }; font-weight: ${
+                    sectionData.menus.menu_item_css.menu_item_font_weight
+                  }; color: ${
+                    sectionData.menus.menu_item_css.menu_item_title_color
+                  };">${item.column_2 || ""}</td>
+    <td class="pb-2" style="font-family: ${
+      sectionData.menus.menu_item_css.menu_item_font_family
+    }; font-size: ${
+                    sectionData.menus.menu_item_css.menu_item_font_size
+                  }; font-weight: ${
+                    sectionData.menus.menu_item_css.menu_item_font_weight
+                  }; color: ${
+                    sectionData.menus.menu_item_css.menu_item_title_color
+                  };">${item.column_3 || ""}</td>
+    <td class="pb-2" style="font-family: ${
+      sectionData.menus.menu_item_css.menu_item_font_family
+    }; font-size: ${
+                    sectionData.menus.menu_item_css.menu_item_font_size
+                  }; font-weight: ${
+                    sectionData.menus.menu_item_css.menu_item_font_weight
+                  }; color: ${
+                    sectionData.menus.menu_item_css.menu_item_title_color
+                  };">${item.column_4 || ""}</td>
+  </tr>
+  `;
+
+                  // Only print the description row if item_category === 0
+                  if (hasDescription) {
+                    html += `
+    <tr class="description category-0">
+      <td colspan="4" class="ps-1" style="font-family: ${
+        sectionData.menus.menu_item_css.menu_item_desc_font_family
+      }; font-size: ${
+                      sectionData.menus.menu_item_css.menu_item_desc_font_size
+                    }; font-weight: ${
+                      sectionData.menus.menu_item_css.menu_item_desc_font_weight
+                    }; color: ${
+                      sectionData.menus.menu_item_css.menu_item_desc_title_color
+                    }; line-height: ${
+                      sectionData.menus.menu_item_css
+                        .menu_item_desc_font_line_height
+                    };">
+        ${item.item_description || ""}
+      </td>
+    </tr>
+    `;
+                  }
+                });
+
+                html += `</tbody></table></div></div></div>`;
+                targetElement.innerHTML += html;
+              });
+            } else if (
+              (zone.zone_type === "Image" && zone.zone_no === targetZoneNo) ||
+              (zone.zone_type === "Video" && zone.zone_no === targetZoneNo)
+            ) {
+              // Create a container for the image or video
+              const container = document.createElement("div");
+              container.style.width = `50vw`;
+              // container.style.height = `39vh`;
+              // container.style.height = `auto`;
+
+              let media;
+              if (zone.zone_type === "Image") {
+                // Create image element
+                media = document.createElement("img");
+                media.src = zone.image_link;
+                media.style.width = `50vw`;
+                media.classList.add("img-fluid");
+                media.style.position = "relative";
+                media.style.zIndex = 9999;
+                // media.style.height = `39vh`;
+                // media.style.height = `auto`;
+                // media.style.objectFit = "cover"; // Ensure image fills the container
+              } else if (zone.zone_type === "Video") {
+                // Create video element
+                media = document.createElement("video");
+                media.src = zone.video_link;
+                media.style.width = `50vw`;
+                // media.style.height = `39vh`;
+                // media.style.height = `auto`;
+                media.style.objectFit = "cover";
+                media.style.position = "relative";
+                media.style.zIndex = 9999;
+                media.autoplay = true;
+                media.muted = true;
+                media.loop = true;
+                media.controls = false; // Add video controls
+              }
+
+              // Append image/video to container
+              container.appendChild(media);
+
+              // Append container to the target element
+              targetElement.appendChild(container);
+            } else if (zone.zone_type === "Slideshow") {
+              let html = `
+          <div class="swiper-container" style=" width:50vw; overflow: ${zone.overflow}; z-index:9999;">
+              <div class="swiper-wrapper">`;
+
+              zone.media.forEach((media) => {
+                html += `<div class="swiper-slide">
+                      <img src="${media.url}" class="img-fluid" alt="Slide" style="width: 100%;"/>
+                  </div>`;
+              });
+
+              html += `</div>
+
+          </div>`;
+
+              targetElement.innerHTML += html;
+
+              // Initialize Swiper after adding slides
+              const swiper = new Swiper(".swiper-container", {
+                loop: true,
+                autoplay: {
+                  delay: 2000,
+                },
+                pagination: {
+                  el: ".swiper-pagination",
+                  clickable: true,
+                },
+                navigation: {
+                  nextEl: ".swiper-button-next",
+                  prevEl: ".swiper-button-prev",
+                },
+                // Dynamic Effect (autoplay,fade,cards,coverflow,flip,cube)
+                effect: zone.media_effect.toLowerCase(),
+                speed: zone.speed,
+                // Fetch effect from JSON
+                // Customize Effects based on chosen media_effect
+                fadeEffect: {
+                  crossFade: true,
+                },
+                // Swiper Specific effect
+                slideEffect: {
+                  crossFade: true,
+                },
+              });
+            }
+          } else if (
+            zone.zone_type === "Slideshow" &&
+            zone.zone_no === targetZoneNo
+          ) {
+            let html = `
+                      <div class="swiper-container" style=" width:50vw; overflow: ${zone.overflow}; z-index:9999;">
+                          <div class="swiper-wrapper">`;
+
+            zone.media.forEach((media) => {
+              html += `<div class="swiper-slide">
+                                  <img src="${media.url}" class="img-fluid" alt="Slide" style="width: 100%; "/>
+                              </div>`;
+            });
+
+            html += `</div>
+
+                      </div>`;
+
+            targetElement.innerHTML += html;
+
+            // Initialize Swiper after adding slides
+            const swiper = new Swiper(".swiper-container", {
+              loop: true,
+              autoplay: {
+                delay: 2000,
+              },
+              pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+              },
+              navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+              },
+              // Dynamic Effect (autoplay,fade,cards,coverflow,flip,cube)
+              effect: zone.media_effect.toLowerCase(),
+              speed: zone.speed,
+              // Fetch effect from JSON
+              // Customize Effects based on chosen media_effect
+              fadeEffect: {
+                crossFade: true,
+              },
+              // Swiper Specific effect
+              slideEffect: {
+                crossFade: true,
+              },
+            });
+          } else if (
+            (zone.zone_type === "Image" && zone.zone_no === targetZoneNo) ||
+            (zone.zone_type === "Video" && zone.zone_no === targetZoneNo)
+          ) {
+            // Create a container for the image or video
+            const container = document.createElement("div");
+            container.style.width = `50vw`;
+            // container.style.height = `calc(100vh - 24px)`;
+            // container.style.height = `auto`;
+            // container.style.zIndex = 9999;
+
+            let media;
+            if (zone.zone_type === "Image") {
+              // Create image element
+              media = document.createElement("img");
+              media.src = zone.image_link;
+              // console.log("zone.image_link", zone.image_link);
+              media.style.width = `50vw`;
+              media.classList.add("img-fluid");
+              media.style.position = "relative";
+              media.style.zIndex = 9999;
+              // media.style.height = `calc(100vh - 24px)`;
+              // media.style.height = `auto`;
+              // media.style.objectFit = "cover"; // Ensure image fills the container
+            } else if (zone.zone_type === "Video") {
+              // Create video element
+              media = document.createElement("video");
+              media.src = zone.video_link;
+              // console.log("zone.video_link", zone.video_link);
+              media.style.width = `50vw`;
+              // media.style.height = `calc(100vh - 24px)`;
+              // media.style.height = `auto`;
+              media.style.position = "relative";
+              media.style.zIndex = 9999;
+              media.style.objectFit = "cover";
+              media.autoplay = true;
+              media.muted = true;
+              media.loop = true;
+              media.controls = false; // Add video controls
+            }
+
+            // Append image/video to container
+            container.appendChild(media);
+
+            // Append container to the target element
+            targetElement.appendChild(container);
+          }
+        });
+      }
+      //
+
+      // Function to_dynamic_zone_4
+      function insertSlideshowContent1(
+        slideshowData,
+        targetElementId,
+        targetZoneNo
+      ) {
+        const targetElement = document.getElementById(targetElementId);
+        // console.log("slideshowData", slideshowData);
+        targetElement.innerHTML = ""; // Clear existing content
+
+        slideshowData.forEach((zone) => {
+          if (zone.zone_no === targetZoneNo) {
+            if (zone.zone_type === "Menu") {
+              zone.sections.forEach((sectionData) => {
+                let html = `
+      <div class="menu-section">
+        <div class="px-4 py-4">
+          <div class="menu-title-name ms-1 d-flex align-items-center" style="display: ${
+            sectionData.header_details.title_content
+              ? "block"
+              : "none !important"
+          }; margin-bottom:-4px;border-bottom: 1px solid gray;">
+            <span class="menuTitle" style="font-size:${
+              sectionData.header_details.title_font_size
+            }; color:${
+                  sectionData.header_details.title_font_color
+                };font-family:${
+                  sectionData.header_details.title_font_family
+                };font-weight:${sectionData.header_details.title_font_weight};
+                      text-transform: uppercase;
+                ">
+              ${sectionData.header_details.title_content}
+   <img id="dynamicImage" src="${sectionData.header_details.title_icon_image}" 
+                
+                 style="height: ${
+                   sectionData.header_details.title_icon_height
+                 }; width: ${sectionData.header_details.title_icon_width};" 
+                 ${
+                   sectionData.header_details.title_icon_image
+                     ? 'class="show-image"'
+                     : ""
+                 } />
+
+            </span>
+          </div>
+          <div class="position-relative z-1">
+            <table class="w-100 mt-2">
+             <thead class="MenuItemDesc w-100" style="display: ${
+               sectionData.column_title_details.colum_title_data.column_1 ||
+               sectionData.column_title_details.colum_title_data.column_2 ||
+               sectionData.column_title_details.colum_title_data.column_3 ||
+               sectionData.column_title_details.colum_title_data.column_4
+                 ? "table-header-group"
+                 : "none !important"
+             };">
+                <tr class="foodItem w-100" style="background-color:${
+                  sectionData.column_title_details.column_title_background
+                };font-family:${
+                  sectionData.column_title_details.column_title_font_family
+                };font-weight:${
+                  sectionData.column_title_details.column_title_font_weight
+                };">
+                  <td class="ps-2" style="font-size:${
+                    sectionData.column_title_details.column_title_font_size
+                  };color:${
+                  sectionData.column_title_details.column_title_color
+                };">${
+                  sectionData.column_title_details.colum_title_data.column_1 ||
+                  ""
+                }</td>
+                  <td class="ps-0 text-center" style="font-size:${
+                    sectionData.column_title_details.column_title_font_size
+                  };color:${
+                  sectionData.column_title_details.column_title_color
+                };">${
+                  sectionData.column_title_details.colum_title_data.column_2 ||
+                  ""
+                }</td>
+                  <td class="ps-0 text-center" style="font-size:${
+                    sectionData.column_title_details.column_title_font_size
+                  };color:${
+                  sectionData.column_title_details.column_title_color
+                };">${
+                  sectionData.column_title_details.colum_title_data.column_3 ||
+                  ""
+                }</td>
+                  <td class="ps-0 text-center" style="font-size:${
+                    sectionData.column_title_details.column_title_font_size
+                  };color:${
+                  sectionData.column_title_details.column_title_color
+                };">${
+                  sectionData.column_title_details.colum_title_data.column_4 ||
+                  ""
+                }</td>
+                </tr>
+              </thead>
+              <tbody class="product-list">`;
+
+                // Adding menu items
+                // Adding menu items
+                // Adding menu items
+                sectionData.menus.menu_item_data.forEach((item) => {
+                  const isSoldOut = item.item_sold === 1;
+                  const soldOutClass = isSoldOut ? "sold-out" : "";
+                  const isVegCategory = item.item_category === 1;
+                  const hasDescription =
+                    item.item_description &&
+                    item.item_description.trim() !== "";
+
+                  let categorySpan = "";
+                  if (isVegCategory) {
+                    categorySpan = `<h3 class="category-veg mb-0 mt-2 " style="display:inline-block; background-color:${sectionData.menus.category.category_background};font-family:${sectionData.menus.category.category_font_family};font-size:${sectionData.menus.category.category_font_size};font-weight:${sectionData.menus.category.category_font_weight};color:${sectionData.menus.category.category_title_color}; line-height:${sectionData.menus.category.category_font_line_height};  text-transform: uppercase;padding:10px 15px;border-bottom:1px solid #333 !important;">${item.column_1}</h3>`;
+                  } else {
+                    categorySpan = item.column_1; // Directly print the column_1 content if not category 1
+                  }
+
+                  // Apply border-bottom if there is no description and it's not a Veg category
+                  let borderStyle =
+                    !hasDescription && !isVegCategory
+                      ? "border-bottom:0px solid black;"
+                      : "border-bottom:none;";
+
+                  html += `
+  <tr class="product-menuItem-name ${soldOutClass}" style="position: relative; ${borderStyle}">
+    <td class="ps-1 pb-2" style="font-family: ${
+      sectionData.menus.menu_item_css.menu_item_font_family
+    }; font-size: ${
+                    sectionData.menus.menu_item_css.menu_item_font_size
+                  }; font-weight: ${
+                    sectionData.menus.menu_item_css.menu_item_font_weight
+                  }; color: ${
+                    sectionData.menus.menu_item_css.menu_item_title_color
+                  }; line-height: ${
+                    sectionData.menus.menu_item_css.menu_item_font_line_height
+                  };">
+      ${categorySpan} 
+      ${
+        isSoldOut
+          ? `<span class="sold" style="background-color: ${sectionData.menus.menu_item_css.sold_out_background}; color: ${sectionData.menus.menu_item_css.sold_out_color}; font-family: ${sectionData.menus.menu_item_css.sold_font_family}; font-size: ${sectionData.menus.menu_item_css.sold_font_size}; font-weight: ${sectionData.menus.menu_item_css.sold_font_weight}; padding:0.8% 1%; position:absolute; margin-left:5px; margin-top:-3px; border-radius:5px;">${sectionData.menus.menu_item_css.sold_out_title}</span>`
+          : ""
+      }
+    </td>
+    <td class="pb-2" style="font-family: ${
+      sectionData.menus.menu_item_css.menu_item_font_family
+    }; font-size: ${
+                    sectionData.menus.menu_item_css.menu_item_font_size
+                  }; font-weight: ${
+                    sectionData.menus.menu_item_css.menu_item_font_weight
+                  }; color: ${
+                    sectionData.menus.menu_item_css.menu_item_title_color
+                  };">${item.column_2 || ""}</td>
+    <td class="pb-2" style="font-family: ${
+      sectionData.menus.menu_item_css.menu_item_font_family
+    }; font-size: ${
+                    sectionData.menus.menu_item_css.menu_item_font_size
+                  }; font-weight: ${
+                    sectionData.menus.menu_item_css.menu_item_font_weight
+                  }; color: ${
+                    sectionData.menus.menu_item_css.menu_item_title_color
+                  };">${item.column_3 || ""}</td>
+    <td class="pb-2" style="font-family: ${
+      sectionData.menus.menu_item_css.menu_item_font_family
+    }; font-size: ${
+                    sectionData.menus.menu_item_css.menu_item_font_size
+                  }; font-weight: ${
+                    sectionData.menus.menu_item_css.menu_item_font_weight
+                  }; color: ${
+                    sectionData.menus.menu_item_css.menu_item_title_color
+                  };">${item.column_4 || ""}</td>
+  </tr>
+  `;
+
+                  // Only print the description row if item_category === 0
+                  if (hasDescription) {
+                    html += `
+    <tr class="description category-0">
+      <td colspan="4" class="ps-1" style="font-family: ${
+        sectionData.menus.menu_item_css.menu_item_desc_font_family
+      }; font-size: ${
+                      sectionData.menus.menu_item_css.menu_item_desc_font_size
+                    }; font-weight: ${
+                      sectionData.menus.menu_item_css.menu_item_desc_font_weight
+                    }; color: ${
+                      sectionData.menus.menu_item_css.menu_item_desc_title_color
+                    }; line-height: ${
+                      sectionData.menus.menu_item_css
+                        .menu_item_desc_font_line_height
+                    };">
+        ${item.item_description || ""}
+      </td>
+    </tr>
+    `;
+                  }
+                });
+
+                html += `</tbody></table></div></div></div>`;
+                targetElement.innerHTML += html;
+              });
+            } else if (
+              (zone.zone_type === "Image" && zone.zone_no === targetZoneNo) ||
+              (zone.zone_type === "Video" && zone.zone_no === targetZoneNo)
+            ) {
+              // Create a container for the image or video
+              const container = document.createElement("div");
+              container.style.width = `50vw`;
+              // container.style.height = `39vh`;
+              // container.style.height = `auto`;
+
+              let media;
+              if (zone.zone_type === "Image") {
+                // Create image element
+                media = document.createElement("img");
+                media.src = zone.image_link;
+                media.style.width = `50vw`;
+                media.classList.add("img-fluid");
+                media.style.position = "relative";
+                media.style.zIndex = 9999;
+                // media.style.height = `39vh`;
+                // media.style.height = `auto`;
+                // media.style.objectFit = "cover"; // Ensure image fills the container
+              } else if (zone.zone_type === "Video") {
+                // Create video element
+                media = document.createElement("video");
+                media.src = zone.video_link;
+                media.style.width = `50vw`;
+                // media.style.height = `39vh`;
+                // media.style.height = `auto`;
+                media.style.objectFit = "cover";
+                media.style.position = "relative";
+                media.style.zIndex = 9999;
+                media.autoplay = true;
+                media.muted = true;
+                media.loop = true;
+                media.controls = false; // Add video controls
+              }
+
+              // Append image/video to container
+              container.appendChild(media);
+
+              // Append container to the target element
+              targetElement.appendChild(container);
+            } else if (zone.zone_type === "Slideshow") {
+              let html = `
+          <div class="swiper-container" style=" width: 50vw; overflow: ${zone.overflow}; z-index:9999;">
+              <div class="swiper-wrapper">`;
+
+              zone.media.forEach((media) => {
+                html += `<div class="swiper-slide">
+                      <img src="${media.url}" class="img-fluid" alt="Slide" style="width: 100%; "/>
+                  </div>`;
+              });
+
+              html += `</div>
+
+          </div>`;
+
+              targetElement.innerHTML += html;
+
+              // Initialize Swiper after adding slides
+              const swiper = new Swiper(".swiper-container", {
+                loop: true,
+                autoplay: {
+                  delay: 2000,
+                },
+                pagination: {
+                  el: ".swiper-pagination",
+                  clickable: true,
+                },
+                navigation: {
+                  nextEl: ".swiper-button-next",
+                  prevEl: ".swiper-button-prev",
+                },
+                // Dynamic Effect (autoplay,fade,cards,coverflow,flip,cube)
+                effect: zone.media_effect.toLowerCase(),
+                speed: zone.speed,
+                // Fetch effect from JSON
+                // Customize Effects based on chosen media_effect
+                fadeEffect: {
+                  crossFade: true,
+                },
+                // Swiper Specific effect
+                slideEffect: {
+                  crossFade: true,
+                },
+              });
+            }
+          } else if (
+            zone.zone_type === "Slideshow" &&
+            zone.zone_no === targetZoneNo
+          ) {
+            let html = `
+                      <div class="swiper-container" style=" width:50vw; overflow: ${zone.overflow}; z-index:9999;">
+                          <div class="swiper-wrapper">`;
+
+            zone.media.forEach((media) => {
+              html += `<div class="swiper-slide">
+                                  <img src="${media.url}" class="img-fluid" alt="Slide" style="width: 100%; "/>
+                              </div>`;
+            });
+
+            html += `</div>
+
+                      </div>`;
+
+            targetElement.innerHTML += html;
+
+            // Initialize Swiper after adding slides
+            const swiper = new Swiper(".swiper-container", {
+              loop: true,
+              autoplay: {
+                delay: 2000,
+              },
+              pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+              },
+              navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+              },
+              // Dynamic Effect (autoplay,fade,cards,coverflow,flip,cube)
+              effect: zone.media_effect.toLowerCase(),
+              speed: zone.speed,
+              // Fetch effect from JSON
+              // Customize Effects based on chosen media_effect
+              fadeEffect: {
+                crossFade: true,
+              },
+              // Swiper Specific effect
+              slideEffect: {
+                crossFade: true,
+              },
+            });
+          } else if (
+            (zone.zone_type === "Image" && zone.zone_no === targetZoneNo) ||
+            (zone.zone_type === "Video" && zone.zone_no === targetZoneNo)
+          ) {
+            // Create a container for the image or video
+            const container = document.createElement("div");
+            container.style.width = `50vw`;
+            // container.style.height = `calc(100vh - 24px)`;
+            // container.style.height = `auto`;
+            // container.style.zIndex = 9999;
+
+            let media;
+            if (zone.zone_type === "Image") {
+              // Create image element
+              media = document.createElement("img");
+              media.src = zone.image_link;
+              console.log("zone.image_link", zone.image_link);
+              media.style.width = `50vw`;
+              media.classList.add("img-fluid");
+              media.style.position = "relative";
+              media.style.zIndex = 9999;
+              // media.style.height = `calc(100vh - 24px)`;
+              // media.style.height = `auto`;
+              // media.style.objectFit = "cover"; // Ensure image fills the container
+            } else if (zone.zone_type === "Video") {
+              // Create video element
+              media = document.createElement("video");
+              media.src = zone.video_link;
+              console.log("zone.video_link", zone.video_link);
+              media.style.width = `50vw`;
+              // media.style.height = `calc(100vh - 24px)`;
+              // media.style.height = `auto`;
+              media.style.objectFit = "cover";
+              media.style.position = "relative";
+              media.style.zIndex = 9999;
+              media.autoplay = true;
+              media.muted = true;
+              media.loop = true;
+              media.controls = false; // Add video controls
+            }
+
+            // Append image/video to container
+            container.appendChild(media);
+
+            // Append container to the target element
+            targetElement.appendChild(container);
+          }
+        });
+      }
+      //
+
+      // Function to_dynamic_zone_1_background-color/image/gradiant
+      function applyZone1Background(zoneData) {
+        // console.log("zoneData______++++", zoneData);
+
+        const zone = zoneData[0];
+        // console.log("zone_no", zoneData[0].zone_no);
+        // console.log("z.zone_no____", zoneData[0].zone_no);
+        if (zone) {
+          const zoneElement = document.getElementById("dynamic-section-1");
+
+          // Reset any previously applied styles
+          zoneElement.style.background = "";
+          zoneElement.style.position = "relative"; // Ensure positioning works
+          // zoneElement.style.height = `56vh`;
+          zoneElement.style.height = `auto`;
+
+          // Clear any existing pseudo-element
+          const existingPseudoElement = document.querySelector(
+            "#dynamic-section-1::before"
+          );
+          if (existingPseudoElement) {
+            existingPseudoElement.remove();
+          }
+
+          if (zone.zone_background_type === "Color") {
+            zoneElement.style.backgroundColor = zone.zone_background_color;
+          } else if (zone.zone_background_type === "Image") {
+            // Create and style the pseudo-element
+            const styleSheet = document.createElement("style");
+            styleSheet.type = "text/css";
+            styleSheet.innerHTML = `
+        #dynamic-section-1::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-image: url(${zone.zone_background_image});
+          background-size: cover; 
+          background-position: center;
+          background-repeat: no-repeat;
+          opacity: 0.1; 
+          z-index: 1;
+        }
+      `;
+            document.head.appendChild(styleSheet);
+          } else if (zone.zone_background_type === "Gradient") {
+            const startColor = zone.gradiant_start_color || "transparent";
+            const endColor = zone.gradiant_end_color || "transparent";
+            zoneElement.style.background = `linear-gradient(to right, ${startColor}, ${endColor})`;
+          }
+        }
+      }
+      //
+
+      // Function to_dynamic_zone_2_background-color/image/gradiant
+      function applyZone2Background(zoneData) {
+        const zone = zoneData[1];
+        // console.log("zone_no", zoneData[1].zone_no);
+        // console.log("z.zone_no____", zoneData[1].zone_no);
+        if (zone) {
+          const zoneElement = document.getElementById("dynamic-section-2");
+
+          // Reset any previously applied styles
+          zoneElement.style.background = "";
+          zoneElement.style.position = "relative"; // Ensure positioning works
+          // zoneElement.style.height = `56vh`;
+          zoneElement.style.height = `auto`;
+
+          // Clear any existing pseudo-element
+          const existingPseudoElement = document.querySelector(
+            "#dynamic-section-2::before"
+          );
+          if (existingPseudoElement) {
+            existingPseudoElement.remove();
+          }
+
+          if (zone.zone_background_type === "Color") {
+            zoneElement.style.backgroundColor = zone.zone_background_color;
+          } else if (zone.zone_background_type === "Image") {
+            // Create and style the pseudo-element
+            const styleSheet = document.createElement("style");
+            styleSheet.type = "text/css";
+            styleSheet.innerHTML = `
+        #dynamic-section-2::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-image: url(${zone.zone_background_image});
+          background-size: cover; 
+          background-position: center;
+          background-repeat: no-repeat;
+          opacity: 0.1; 
+          z-index: 1;
+        }
+      `;
+            document.head.appendChild(styleSheet);
+          } else if (zone.zone_background_type === "Gradient") {
+            const startColor = zone.gradiant_start_color || "transparent";
+            const endColor = zone.gradiant_end_color || "transparent";
+            zoneElement.style.background = `linear-gradient(to right, ${startColor}, ${endColor})`;
+          }
+        }
+      }
+      //
+
+      // Function to_dynamic_zone_3_background-color/image/gradiant
+      function applyZone3Background(zoneData) {
+        const zone = zoneData[2];
+        // console.log("zone_no", zoneData[2].zone_no);
+        // console.log("z.zone_no____", zoneData[2].zone_no);
+        if (zone) {
+          const zoneElement = document.getElementById("dynamic-section-3");
+
+          // Reset any previously applied styles
+          zoneElement.style.background = "";
+          zoneElement.style.position = "relative"; // Ensure positioning works
+          // zoneElement.style.height = `56vh`;
+          zoneElement.style.height = `auto`;
+
+          // Clear any existing pseudo-element
+          const existingPseudoElement = document.querySelector(
+            "#dynamic-section-3::before"
+          );
+          if (existingPseudoElement) {
+            existingPseudoElement.remove();
+          }
+
+          if (zone.zone_background_type === "Color") {
+            zoneElement.style.backgroundColor = zone.zone_background_color;
+          } else if (zone.zone_background_type === "Image") {
+            // Create and style the pseudo-element
+            const styleSheet = document.createElement("style");
+            styleSheet.type = "text/css";
+            styleSheet.innerHTML = `
+        #dynamic-section-3::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-image: url(${zone.zone_background_image});
+          background-size: cover; 
+          background-position: center;
+          background-repeat: no-repeat;
+          opacity: 0.1; 
+          z-index: 1; 
+        }
+      `;
+            document.head.appendChild(styleSheet);
+          } else if (zone.zone_background_type === "Gradient") {
+            const startColor = zone.gradiant_start_color || "transparent";
+            const endColor = zone.gradiant_end_color || "transparent";
+            zoneElement.style.background = `linear-gradient(to right, ${startColor}, ${endColor})`;
+          }
+        }
+      }
+      //
+
+      // Function to_dynamic_zone_4_background-color/image/gradiant
+      function applyZone4Background(zoneData) {
+        const zone = zoneData[3];
+        // console.log("zone_no", zoneData[2].zone_no);
+        // console.log("z.zone_no____", zoneData[2].zone_no);
+        if (zone) {
+          const zoneElement = document.getElementById("dynamic-section-4");
+
+          // Reset any previously applied styles
+          zoneElement.style.background = "";
+          zoneElement.style.position = "relative"; // Ensure positioning works
+          // zoneElement.style.height = `56vh`;
+          zoneElement.style.height = `auto`;
+
+          // Clear any existing pseudo-element
+          const existingPseudoElement = document.querySelector(
+            "#dynamic-section-4::before"
+          );
+          if (existingPseudoElement) {
+            existingPseudoElement.remove();
+          }
+
+          if (zone.zone_background_type === "Color") {
+            zoneElement.style.backgroundColor = zone.zone_background_color;
+          } else if (zone.zone_background_type === "Image") {
+            // Create and style the pseudo-element
+            const styleSheet = document.createElement("style");
+            styleSheet.type = "text/css";
+            styleSheet.innerHTML = `
+        #dynamic-section-4::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-image: url(${zone.zone_background_image});
+          background-size: cover; 
+          background-position: center;
+          background-repeat: no-repeat;
+          opacity: 0.1; 
+          z-index: 1; 
+        }
+      `;
+            document.head.appendChild(styleSheet);
+          } else if (zone.zone_background_type === "Gradient") {
+            const startColor = zone.gradiant_start_color || "transparent";
+            const endColor = zone.gradiant_end_color || "transparent";
+            zoneElement.style.background = `linear-gradient(to right, ${startColor}, ${endColor})`;
+          }
+        }
+      }
+      //
+    </script>
+
+    <script>
+      // Function to handle image size adjustment
+      function adjustAllImageSizes() {
+        // Select all menu sections
+        const menuSections = document.querySelectorAll(
+          ".dynamic-section .menu-section"
+        );
+
+        // Iterate over each menu section
+        menuSections.forEach((menuSection) => {
+          // Select the image and span element within the current menu section
+          const imageElement = menuSection.querySelector(
+            ".menu-title-name .menuTitle img"
+          );
+          const spanElement = menuSection.querySelector(
+            ".menu-title-name .menuTitle"
+          );
+
+          // Check if both elements are present
+          if (imageElement && spanElement) {
+            // Get the computed font size of the span element
+            const fontSize = window.getComputedStyle(spanElement).fontSize;
+            const imageSize = parseFloat(fontSize) + 9;
+
+            // Set the image size based on the font size
+            imageElement.style.cssText = `height: ${imageSize}px !important; width: ${imageSize}px !important;`;
+          }
+        });
+      }
+
+      // Set up MutationObserver to watch for changes in the dynamic section
+      const targetNode = document.querySelector(".dynamic-section");
+      const config = { childList: true, subtree: true };
+
+      const observer = new MutationObserver((mutationsList) => {
+        for (const mutation of mutationsList) {
+          if (mutation.type === "childList") {
+            // Run the adjustment function when new nodes are added
+            adjustAllImageSizes();
+          }
+        }
+      });
+
+      // Check if the target node exists before observing
+      if (targetNode) {
+        observer.observe(targetNode, config);
+      }
+
+      // Initial call to adjust image sizes on page load
+      adjustAllImageSizes();
+
+      /* Compression Code */
+      const currentDate = new Date().toLocaleDateString();
+      const CACHE_NAME = "media-cache-" + currentDate;
+      const MEDIA_URLS = ["/asset/"];
+
+      // Install the service worker and cache files
+      self.addEventListener("install", (event) => {
+        event.waitUntil(
+          caches.open(CACHE_NAME).then((cache) => {
+            console.log("Caching media assets...");
+            return cache.addAll(MEDIA_URLS);
+          })
+        );
+      });
+
+      // Intercept fetch requests and serve cached files
+      self.addEventListener("fetch", (event) => {
+        event.respondWith(
+          caches.match(event.request).then((response) => {
+            return response || fetch(event.request);
+          })
+        );
+      });
+    </script>
+  </body>
+</html>
